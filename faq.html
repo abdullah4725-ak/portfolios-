@@ -330,7 +330,7 @@
       </div>
       <div class="form-success" id="formSuccess">
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4 4 8-8" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Message sent. I'll reply within 24 hours.
+        Opening WhatsApp with your message. I'll reply within 24 hours.
       </div>
     </form>
   </div>
@@ -412,8 +412,8 @@
     });
   });
 
-  // FORM SUBMIT — Formspree
-  document.getElementById('contactForm').addEventListener('submit', async e => {
+  // FORM SUBMIT — sends via WhatsApp with prefilled message
+  document.getElementById('contactForm').addEventListener('submit', e => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value.trim();
@@ -423,32 +423,12 @@
       alert('Please fill in your name, email, and message.');
       return;
     }
-    const btn = form.querySelector('button[type=submit]');
-    btn.textContent = 'Sending…';
-    btn.disabled = true;
-    try {
-      const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
-        method: 'POST',
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: form.name.value,
-          email: form.email.value,
-          company: form.company.value,
-          topic: form.topic.value,
-          message: form.message.value
-        })
-      });
-      if (res.ok) {
-        form.reset();
-        document.getElementById('formSuccess').classList.add('show');
-      } else {
-        alert('Something went wrong. Try messaging me on WhatsApp instead.');
-      }
-    } catch {
-      alert('Could not send. Try messaging me on WhatsApp instead.');
-    }
-    btn.textContent = 'Send Message →';
-    btn.disabled = false;
+    const company = form.company.value.trim();
+    const topic = form.topic.value;
+    const text = `Hi Abdullah,\n\nName: ${name}\nEmail: ${email}${company ? '\nCompany: ' + company : ''}${topic ? '\nTopic: ' + topic : ''}\n\nMessage:\n${message}`;
+    window.open('https://wa.me/92326281281?text=' + encodeURIComponent(text), '_blank');
+    form.reset();
+    document.getElementById('formSuccess').classList.add('show');
   });
 </script>
 </body>
