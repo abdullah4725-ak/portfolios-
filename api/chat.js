@@ -1,15 +1,6 @@
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+const https = require('https');
 
-  const { messages } = req.body;
-
-  if (!messages || !Array.isArray(messages)) {
-    return res.status(400).json({ error: 'Invalid request body' });
-  }
-
-  const SYSTEM_PROMPT = `You are Aria, an AI qualification assistant for Muhammad Abdullah Khan — an AI Automation Builder specializing in Lead Automation, Voice AI, and RAG (Retrieval-Augmented Generation) systems.
+const SYSTEM_PROMPT = `You are Aria, an AI qualification assistant for Muhammad Abdullah Khan — an AI Automation Builder specializing in Lead Automation, Voice AI, and RAG (Retrieval-Augmented Generation) systems.
 
 Your job is to qualify leads and book discovery calls. Be warm, concise, and conversational. Never write long paragraphs — keep responses to 2-3 short sentences max.
 
@@ -23,7 +14,7 @@ Pricing:
 - Single System: Starting at $1,500 — one focused automation (lead, voice, or RAG)
 - Full Stack: Starting at $4,000 — complete AI infrastructure (lead + voice + RAG integrated)
 
-Booking: https://cal.com/muhammadabdullah-khan/30min
+Booking: https://cal.com/drabdullahautomation/30min
 
 Your qualification flow (follow this order naturally in conversation):
 1. Ask what their business does and what their biggest time drain is
@@ -40,36 +31,76 @@ Rules:
 - Keep tone professional but approachable — not corporate, not overly casual
 - If someone says they have no budget, acknowledge it and offer the free audit as a zero-risk first step`;
 
-  try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+function openaiRequest(apiKey, messages) {
+  return new Promise((resolve, reject) => {
+    const body = JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
+      max_tokens: 200,
+      temperature: 0.7,
+    });
+
+    const options = {
+      hostname: 'api.openai.com',
+      path: '/v1/chat/completions',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Length': Buffer.byteLength(body),
       },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          ...messages,
-        ],
-        max_tokens: 200,
-        temperature: 0.7,
-      }),
+    };
+
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => { data += chunk; });
+      res.on('end', () => {
+        try {
+          resolve({ status: res.statusCode, body: JSON.parse(data) });
+        } catch (e) {
+          reject(new Error('Failed to parse OpenAI response'));
+        }
+      });
     });
 
-    if (!response.ok) {
-      const err = await response.json();
-      console.error('OpenAI error:', err);
+    req.on('error', reject);
+    req.write(body);
+    req.end();
+  });
+}
+
+module.exports = async function handler(req, res) {
+  // CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const { messages } = req.body || {};
+  if (!messages || !Array.isArray(messages)) {
+    return res.status(400).json({ error: 'Invalid request body' });
+  }
+
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    console.error('OPENAI_API_KEY not set');
+    return res.status(500).json({ error: 'Server configuration error.' });
+  }
+
+  try {
+    const { status, body } = await openaiRequest(apiKey, messages);
+
+    if (status !== 200) {
+      console.error('OpenAI error:', JSON.stringify(body));
       return res.status(502).json({ error: 'AI service error. Please try again.' });
     }
 
-    const data = await response.json();
-    const reply = data.choices?.[0]?.message?.content ?? "Sorry, I couldn't generate a response. Please try again.";
-
+    const reply = body.choices?.[0]?.message?.content ?? "Sorry, I couldn't generate a response.";
     return res.status(200).json({ reply });
   } catch (error) {
-    console.error('Handler error:', error);
+    console.error('Handler error:', error.message);
     return res.status(500).json({ error: 'Internal server error. Please try again.' });
   }
-}
+};
