@@ -510,11 +510,13 @@
   // SCROLL REVEAL
   const revealObs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
   document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
   window.addEventListener('load', () => {
     document.querySelectorAll('.pricing-hero .reveal').forEach(el => el.classList.add('visible'));
   });
+  // Fallback: force-show any stuck reveal elements after 2.5s
+  setTimeout(() => { document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible')); }, 2500);
 
   // NAV SOLIDIFY
   window.addEventListener('scroll', () => {

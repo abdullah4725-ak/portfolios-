@@ -305,9 +305,11 @@
 </footer>
 
 <script>
-  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), {threshold:.1, rootMargin:'0px 0px -40px 0px'});
+  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), {threshold:.05, rootMargin:'0px 0px -20px 0px'});
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   window.addEventListener('load', () => document.querySelectorAll('#top .reveal').forEach(el => el.classList.add('visible')));
+  // Fallback: force-show any stuck reveal elements after 2.5s
+  setTimeout(() => { document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible')); }, 2500);
 
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');

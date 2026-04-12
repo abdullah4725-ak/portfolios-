@@ -300,14 +300,29 @@
       .process-item { grid-template-columns: 44px 1fr; gap: 1.25rem; }
       .process-num { font-size: 2rem; }
       .scroll-indicator { display: none; }
+      #hero { padding: 140px 1.25rem 80px; }
+      .hero-pills { gap: .4rem; }
+      .pill { font-size: .72rem; padding: .3rem .7rem; }
+      .featured-box h3 { font-size: 1.25rem; }
+      .roi-container { padding: 1.5rem; gap: 2rem; }
+      .roi-price { font-size: 2.25rem; }
+      .testi-card { padding: 1.5rem; }
+      .contact-cta { padding: 2rem 1.5rem; }
+      .contact-link { padding: .85rem 1rem; font-size: .8rem; }
+      /* Ensure chatbot & back-top don't overlap */
+      .chatbot-widget { bottom: 1.25rem; left: 1rem; }
+      .back-top { bottom: 1.25rem; right: 1rem; }
     }
     @media (max-width: 480px) {
-      h1 { font-size: 2.5rem; }
+      h1 { font-size: 2.2rem; }
       .about-stats { grid-template-columns: 1fr 1fr; }
-      .hero-label { font-size: .65rem; }
-      .back-top { bottom: 1.25rem; right: 1.25rem; }
-      .chatbot-widget { bottom: 1.25rem; left: 1.25rem; }
-      .chatbot-window { width: calc(100vw - 2.5rem); height: 400px; }
+      .hero-label { font-size: .65rem; padding: .35rem .8rem; }
+      .chatbot-window { width: calc(100vw - 2rem); height: 380px; }
+      .stat-number { font-size: 1.6rem; }
+      .stat-card { padding: 1.15rem; }
+      .service-card { padding: 1.5rem; }
+      .contact-grid { gap: 2rem; }
+      footer { padding: 1.25rem 1rem; }
     }
 
     /* ── AI CHATBOT ── */
@@ -918,11 +933,18 @@
   // ── SCROLL REVEAL ──
   const revealObs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
   document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
   window.addEventListener('load', () => {
     document.querySelectorAll('#hero .reveal').forEach(el => el.classList.add('visible'));
   });
+
+  // Fallback: if any .reveal is still hidden after 2.5s, force-show it
+  setTimeout(() => {
+    document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+      el.classList.add('visible');
+    });
+  }, 2500);
 
   // ── ANIMATED COUNTERS ──
   function animateCount(el) {
