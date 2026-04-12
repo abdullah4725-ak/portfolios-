@@ -11,3 +11,8 @@ Portfolio/index.html
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Environment variables (API keys — never commit)
+.env
+.env.local
+.env*.local
