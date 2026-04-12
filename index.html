@@ -24,8 +24,30 @@
       --text: #eeeeff; --muted: #777799; --border: #1e1e30;
       --nav-h: 60px;
     }
-    html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; line-height: 1.6; overflow-x: hidden; }
+    html[data-theme="light"] {
+      --bg: #fafafa; --bg2: #ffffff; --bg3: #f0f0f5;
+      --accent: #5e4bd8; --accent2: #7c6fff; --accent3: #d15ce0;
+      --text: #1a1a24; --muted: #6a6a8a; --border: #e2e2ec;
+    }
+    html { scroll-behavior: smooth; transition: background 0.4s, color 0.4s; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; line-height: 1.6; overflow-x: hidden; transition: background 0.4s, color 0.4s; }
+
+    /* LIGHT MODE SPECIFIC ADJUSTMENTS */
+    html[data-theme="light"] .bg-glow { opacity: 0.8 !important; }
+    html[data-theme="light"] .bg-glow-1 { background: radial-gradient(circle, rgba(94,75,216,.08) 0%, transparent 70%); }
+    html[data-theme="light"] .bg-glow-2 { background: radial-gradient(circle, rgba(209,92,224,.06) 0%, transparent 70%); }
+    html[data-theme="light"] .bg-glow-3 { background: radial-gradient(circle, rgba(94,75,216,.05) 0%, transparent 70%); }
+    html[data-theme="light"] .nav-logo { background: linear-gradient(135deg, var(--accent), var(--accent3)); -webkit-background-clip: text; }
+    html[data-theme="light"] .stat-number { background: linear-gradient(135deg, var(--accent), var(--accent3)); -webkit-background-clip: text; }
+    html[data-theme="light"] .gradient-text { background: linear-gradient(135deg, var(--accent), var(--accent3), var(--accent)); background-size: 200% 200%; -webkit-background-clip: text; }
+    html[data-theme="light"] nav, html[data-theme="light"] .mobile-menu { background: rgba(250,250,250,.85); }
+    html[data-theme="light"] .hero-video-bg::after { background: linear-gradient(to bottom, rgba(250,250,250,.3) 0%, rgba(250,250,250,.1) 40%, rgba(250,250,250,.85) 85%, var(--bg) 100%); }
+    html[data-theme="light"] .tools-strip-video video { filter: invert(1) hue-rotate(180deg); opacity: 0.04; }
+    html[data-theme="light"] .about-text { background-blend-mode: overlay; background-color: rgba(255,255,255,0.9); }
+    html[data-theme="light"] .contact-bg { filter: invert(1); opacity: 0.04; }
+    html[data-theme="light"] .process-bg { filter: invert(1); opacity: 0.03; }
+    html[data-theme="light"] .system-visual-overlay { background: linear-gradient(160deg, transparent 50%, rgba(250,250,250,.8) 100%); }
+    html[data-theme="light"] .system-badge { background: rgba(255,255,255,.9); color: var(--accent); }
 
     /* GRAIN */
     body::before {
@@ -88,9 +110,10 @@
 
     /* ── HERO ── */
     .hero-wrapper { position: relative; min-height: 100vh; overflow: hidden; }
-    .hero-video-bg { position: absolute; inset: 0; z-index: 0; }
-    .hero-video-bg video { width: 100%; height: 100%; object-fit: cover; opacity: .22; filter: saturate(1.4); }
-    .hero-video-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(5,5,13,.3) 0%, rgba(5,5,13,.1) 40%, rgba(5,5,13,.85) 85%, var(--bg) 100%); }
+    .hero-video-bg { position: absolute; inset: 0; z-index: 0; background-color: var(--bg); transition: background-color 0.4s; }
+    #bgCanvas { display: block; width: 100%; height: 100%; opacity: 0.7; transition: opacity 0.4s; }
+    html[data-theme="light"] #bgCanvas { opacity: 0.4; }
+    .hero-video-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(5,5,13,.3) 0%, rgba(5,5,13,.1) 40%, rgba(5,5,13,.85) 85%, var(--bg) 100%); pointer-events: none; }
 
     #hero { position: relative; z-index: 1; padding: 180px 2rem 120px; max-width: 1100px; margin: 0 auto; }
     .hero-label { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.75rem; display: inline-flex; align-items: center; gap: .75rem; border: 1px solid rgba(124,111,255,.3); padding: .4rem 1rem; border-radius: 999px; background: rgba(124,111,255,.07); }
@@ -371,6 +394,10 @@
     <li><a href="notes.html">Notes</a></li>
     <li><span class="nav-divider"></span></li>
     <li><a href="#contact" class="nav-cta" data-section="contact">Book Audit</a></li>
+    <li class="theme-toggle" id="themeToggle" style="margin-left: 1rem; cursor: pointer; color: var(--muted); display:flex; align-items:center;" aria-label="Toggle Theme">
+      <svg id="moonIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      <svg id="sunIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+    </li>
   </ul>
   <button class="hamburger" id="hamburger" aria-label="Toggle menu">
     <span></span><span></span><span></span>
@@ -393,9 +420,7 @@
 <!-- HERO -->
 <div class="hero-wrapper">
   <div class="hero-video-bg">
-    <video autoplay muted loop playsinline poster="files/Dark_deep_space_202604121155.png">
-      <source src="files/Neural_network_nodes_202604121156.mp4" type="video/mp4">
-    </video>
+    <canvas id="bgCanvas"></canvas>
   </div>
   <section id="hero">
     <div class="hero-label reveal"><span class="dot"></span>AI Automation Builder · Available for Projects</div>
@@ -782,6 +807,112 @@
 </div>
 
 <script>
+  // ── THEME TOGGLE ──
+  const themeToggle = document.getElementById('themeToggle');
+  const moonIcon = document.getElementById('moonIcon');
+  const sunIcon = document.getElementById('sunIcon');
+  
+  function updateIcons(isLight) {
+    if (isLight) { moonIcon.style.display = 'none'; sunIcon.style.display = 'block'; }
+    else { moonIcon.style.display = 'block'; sunIcon.style.display = 'none'; }
+  }
+
+  // Init theme from localStorage
+  if (localStorage.getItem('theme') === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    updateIcons(true);
+  }
+
+  themeToggle.addEventListener('click', () => {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'dark');
+      updateIcons(false);
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+      updateIcons(true);
+    }
+  });
+
+  // ── INTERACTIVE CANVAS BACKGROUND ──
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let width, height, particles;
+  
+  const mouse = { x: null, y: null, radius: 150 };
+  window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
+  window.addEventListener('touchmove', (e) => { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; });
+  window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+
+  function initCanvas() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    particles = [];
+    const density = Math.floor((width * height) / 18000);
+    
+    for (let i = 0; i < density; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: (Math.random() - 0.5) * 0.8,
+        size: Math.random() * 2 + 1
+      });
+    }
+  }
+
+  function drawCanvas() {
+    ctx.clearRect(0, 0, width, height);
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    const colorRGB = isLight ? '94, 75, 216' : '124, 111, 255';
+    const lineColor = isLight ? 'rgba(94, 75, 216,' : 'rgba(124, 111, 255,';
+
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > width) p.vx *= -1;
+      if (p.y < 0 || p.y > height) p.vy *= -1;
+
+      // Interaction
+      if (mouse.x != null && mouse.y != null) {
+        let dx = mouse.x - p.x;
+        let dy = mouse.y - p.y;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < mouse.radius) {
+          const force = (mouse.radius - dist) / mouse.radius;
+          p.x -= dx * force * 0.02;
+          p.y -= dy * force * 0.02;
+        }
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgb(${colorRGB})`;
+      ctx.fill();
+
+      // Lines
+      particles.forEach(p2 => {
+        let dx = p.x - p2.x;
+        let dy = p.y - p2.y;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `${lineColor} ${1 - dist/120})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      });
+    });
+    
+    requestAnimationFrame(drawCanvas);
+  }
+  
+  window.addEventListener('resize', initCanvas);
+  if(canvas) { initCanvas(); drawCanvas(); }
+
   // ── SCROLL REVEAL ──
   const revealObs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
