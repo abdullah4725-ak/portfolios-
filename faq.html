@@ -215,7 +215,7 @@
 
     <div class="faq-item reveal" data-category="working">
       <div class="faq-q"><span class="faq-q-text">Do you work with non-technical founders?</span><span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Yes. You describe the problem in plain language — what's breaking, what's slow, what you keep hiring people to do. I handle everything technical. You never need to understand what a webhook is.</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Yes. You describe the problem in plain language: what's breaking, what's slow, what you keep hiring people to do. I handle everything technical. You never need to understand what a webhook is.</div></div>
     </div>
 
     <div class="faq-item reveal reveal-delay-1" data-category="working">
@@ -225,7 +225,7 @@
 
     <div class="faq-item reveal reveal-delay-2" data-category="working">
       <div class="faq-q"><span class="faq-q-text">How long does a build typically take?</span><span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">A single system (e.g. a Voice AI booking agent or a RAG knowledge base) typically takes 1–2 weeks from scoping to delivery. A full multi-system build — Voice + WhatsApp + RAG integrated — takes 3–5 weeks. Timelines depend on data readiness and how quickly you can review and give feedback.</div></div>
+      <div class="faq-a"><div class="faq-a-inner">A single system (e.g. a Voice AI booking agent or a RAG knowledge base) typically takes 1–2 weeks from scoping to delivery. A full multi-system build (Voice + WhatsApp + RAG integrated) takes 3–5 weeks. Timelines depend on data readiness and how quickly you can review and give feedback.</div></div>
     </div>
 
     <div class="faq-item reveal reveal-delay-3" data-category="working">
@@ -235,17 +235,17 @@
 
     <div class="faq-item reveal" data-category="technical">
       <div class="faq-q"><span class="faq-q-text">What tools and platforms do you build on?</span><span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Primarily n8n for orchestration, OpenAI and Claude for AI reasoning, Twilio and ElevenLabs for voice, WhatsApp Cloud API for messaging, Pinecone or Supabase for vector storage, and Cal.com for booking. The stack is chosen for the job — not forced to fit a template.</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Primarily n8n for orchestration, OpenAI and Claude for AI reasoning, Twilio and ElevenLabs for voice, WhatsApp Cloud API for messaging, Pinecone or Supabase for vector storage, and Cal.com for booking. The stack is chosen for the job. Not forced to fit a template.</div></div>
     </div>
 
     <div class="faq-item reveal reveal-delay-1" data-category="technical">
       <div class="faq-q"><span class="faq-q-text">What happens when the AI doesn't know the answer?</span><span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Every system I build has a confidence scoring layer. When the AI's confidence drops below a defined threshold, it is architecturally prevented from guessing. It tells the user it will connect them with a human, and simultaneously fires a silent alert (usually Slack) to your team with the exact query and full context. The handoff is seamless — the prospect never feels the gap.</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Every system I build has a confidence scoring layer. When the AI's confidence drops below a defined threshold, it is architecturally prevented from guessing. It tells the user it will connect them with a human, and simultaneously fires a silent alert (usually Slack) to your team with the exact query and full context. The handoff is seamless. The prospect never feels the gap.</div></div>
     </div>
 
     <div class="faq-item reveal reveal-delay-2" data-category="technical">
       <div class="faq-q"><span class="faq-q-text">Will the system work 24/7 without someone watching it?</span><span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Yes. That is the entire point. Every system ships with fallback logic for failure states, an audit trail of every action taken, and a kill switch for high-stakes operations. An automation that needs babysitting is not an automation — it is a liability.</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Yes. That is the entire point. Every system ships with fallback logic for failure states, an audit trail of every action taken, and a kill switch for high-stakes operations. An automation that needs babysitting is not an automation. It is a liability.</div></div>
     </div>
 
     <div class="faq-item reveal reveal-delay-3" data-category="technical">
@@ -255,12 +255,12 @@
 
     <div class="faq-item reveal" data-category="pricing">
       <div class="faq-q"><span class="faq-q-text">Why no hourly rate?</span><span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Hourly billing incentivises slow work. You are paying for a working system — not for my time. Every engagement is scoped as a fixed deliverable. You know what you are getting and what you are paying before anything starts.</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Hourly billing incentivises slow work. You are paying for a working system, not for my time. Every engagement is scoped as a fixed deliverable. You know what you are getting and what you are paying before anything starts.</div></div>
     </div>
 
     <div class="faq-item reveal reveal-delay-1" data-category="pricing">
       <div class="faq-q"><span class="faq-q-text">What is included in post-launch support?</span><span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Single System builds include 2 weeks of post-launch support. Full Stack builds include 30 days. Support covers bugs, unexpected edge cases, and configuration issues. It does not cover new features — those are scoped separately. Critical issues during support windows get same-day response.</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Single System builds include 2 weeks of post-launch support. Full Stack builds include 30 days. Support covers bugs, unexpected edge cases, and configuration issues. It does not cover new features. Those are scoped separately. Critical issues during support windows get same-day response.</div></div>
     </div>
 
     <div class="faq-item reveal reveal-delay-2" data-category="pricing">
@@ -275,12 +275,12 @@
 
     <div class="faq-item reveal reveal-delay-1" data-category="results">
       <div class="faq-q"><span class="faq-q-text">What is the biggest reason AI automation projects fail?</span><span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">No fallback logic. Most builders only cover the happy path — what happens when everything works. They never document what happens when data is missing, when the AI returns garbage, or when the approver is on leave. Those gaps are where systems fail silently at 2am. Every system I build covers failure states first.</div></div>
+      <div class="faq-a"><div class="faq-a-inner">No fallback logic. Most builders only cover the happy path: what happens when everything works. They never document what happens when data is missing, when the AI returns garbage, or when the approver is on leave. Those gaps are where systems fail silently at 2am. Every system I build covers failure states first.</div></div>
     </div>
 
     <div class="faq-item reveal reveal-delay-2" data-category="results">
       <div class="faq-q"><span class="faq-q-text">Can you show me examples of systems you've built?</span><span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Yes. The <a href="index.html#system">Featured System section</a> on the homepage shows the Omni-Channel Master Controller — a live Voice + WhatsApp system with Intent Switch, Calendar Defender, and Liability Shield. Architecture breakdowns and live demos are available on request during the audit call.</div></div>
+      <div class="faq-a"><div class="faq-a-inner">Yes. The <a href="index.html#system">Featured System section</a> on the homepage shows the Omni-Channel Master Controller, a live Voice + WhatsApp system with Intent Switch, Calendar Defender, and Liability Shield. Architecture breakdowns and live demos are available on request during the audit call.</div></div>
     </div>
 
   </div>
@@ -342,7 +342,7 @@
 <section style="padding-top:60px; padding-bottom:80px">
   <div class="contact-strip reveal">
     <h2>Still not sure? <span class="gradient-text">Let's just talk.</span></h2>
-    <p>30 minutes. No pitch. I'll show you exactly where your biggest leak is.<br>You walk away with clarity — whether you hire me or not.</p>
+    <p>30 minutes. No pitch. I'll show you exactly where your biggest leak is.<br>You walk away with clarity, whether you hire me or not.</p>
     <div class="contact-btns">
       <a href="index.html#contact" class="btn">Book Free Audit →</a>
       <a href="https://wa.me/92326281281" class="btn btn-wa" target="_blank" rel="noopener">
@@ -412,8 +412,8 @@
     });
   });
 
-  // FORM SUBMIT (frontend-only — wire to Formspree/Make/n8n webhook later)
-  document.getElementById('contactForm').addEventListener('submit', e => {
+  // FORM SUBMIT — Formspree
+  document.getElementById('contactForm').addEventListener('submit', async e => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value.trim();
@@ -423,13 +423,32 @@
       alert('Please fill in your name, email, and message.');
       return;
     }
-    // Show success state (replace this with real fetch() to your webhook)
-    form.querySelector('button[type=submit]').textContent = 'Sending…';
-    setTimeout(() => {
-      form.reset();
-      form.querySelector('button[type=submit]').textContent = 'Send Message →';
-      document.getElementById('formSuccess').classList.add('show');
-    }, 800);
+    const btn = form.querySelector('button[type=submit]');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+    try {
+      const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name.value,
+          email: form.email.value,
+          company: form.company.value,
+          topic: form.topic.value,
+          message: form.message.value
+        })
+      });
+      if (res.ok) {
+        form.reset();
+        document.getElementById('formSuccess').classList.add('show');
+      } else {
+        alert('Something went wrong. Try messaging me on WhatsApp instead.');
+      }
+    } catch {
+      alert('Could not send. Try messaging me on WhatsApp instead.');
+    }
+    btn.textContent = 'Send Message →';
+    btn.disabled = false;
   });
 </script>
 </body>
