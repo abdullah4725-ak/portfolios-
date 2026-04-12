@@ -93,8 +93,10 @@ module.exports = async function handler(req, res) {
     const { status, body } = await openaiRequest(apiKey, messages);
 
     if (status !== 200) {
-      console.error('OpenAI error:', JSON.stringify(body));
-      return res.status(502).json({ error: 'AI service error. Please try again.' });
+      console.error('OpenAI error status:', status, JSON.stringify(body));
+      // Return the actual OpenAI error message to help debug
+      const oaiMsg = body?.error?.message || JSON.stringify(body);
+      return res.status(502).json({ error: oaiMsg });
     }
 
     const reply = body.choices?.[0]?.message?.content ?? "Sorry, I couldn't generate a response.";
