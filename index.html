@@ -1093,10 +1093,6 @@
   const chatbotSend = document.getElementById('chatbotSend');
   const chatbotBadge = document.querySelector('.chatbot-badge');
 
-  // Conversation history sent to API
-  const conversationHistory = [];
-  let isSending = false;
-
   chatbotBtn.addEventListener('click', () => {
     chatbotWindow.classList.add('open');
     if (chatbotBadge) chatbotBadge.style.display = 'none';
@@ -1141,88 +1137,42 @@
     chatbotSend.style.opacity = sending ? '0.5' : '1';
   }
 
-  const SYSTEM_PROMPT = `You are Aria, an AI qualification assistant for Muhammad Abdullah Khan — an AI Automation Builder specializing in Lead Automation, Voice AI, and RAG (Retrieval-Augmented Generation) systems.
+  const knowledgeBase = [
+    { keywords: ['price', 'pricing', 'cost', 'fee', 'charge', 'rate'], response: "My systems are scoped per project — no retainers. The free audit is zero cost, a single system starts at $1,500, and a full AI stack from $4,000. <br><br>Check <a href='pricing.html' style='color:var(--accent2);font-weight:600;'>the pricing page</a> or book a call and I'll scope yours exactly." },
+    { keywords: ['book', 'audit', 'meeting', 'call', 'consultation', 'schedule', 'appointment'], response: "You can book your free 30-minute audit right here — no pitch, just a clear look at your workflow: <br><br><a href='https://cal.com/drabdullahautomation/30min' target='_blank' style='color:var(--accent2);font-weight:600;'>📅 Book Free Audit →</a>" },
+    { keywords: ['lead', 'leads', 'qualify', 'qualification', 'crm', 'pipeline', 'inquiry'], response: "Lead automation captures, scores, and routes every inquiry before a human touches it — across WhatsApp, email, or your CRM. No more manually sorting your pipeline. Want to see how it works for your business?" },
+    { keywords: ['voice', 'phone', 'call', 'inbound', 'outbound', 'agent', 'caller'], response: "Voice AI agents handle inbound and outbound calls 24/7 — they qualify, answer FAQs, and book appointments. With a strict escalation protocol so it hands off to you exactly when needed." },
+    { keywords: ['rag', 'knowledge', 'document', 'database', 'clinical', 'pharma', 'healthcare', 'medical'], response: "RAG systems let AI answer from your actual documents — SOPs, knowledge bases, clinical data, compliance docs. Especially powerful for healthcare where accuracy is non-negotiable. Want to explore this for your use case?" },
+    { keywords: ['whatsapp', 'wa', 'message', 'chat', 'messaging'], response: "WhatsApp automation handles the full flow — intake, qualification, booking, follow-up, and escalation — all from one decision engine. It's one of the highest-ROI systems for service businesses." },
+    { keywords: ['n8n', 'zapier', 'make', 'platform', 'tool', 'stack', 'tech'], response: "Everything is built in n8n — it allows custom code, complex fallback logic, and handles high volume securely without Zapier's markup. You get full ownership of the workflow, not a locked SaaS dependency." },
+    { keywords: ['fail', 'break', 'error', 'wrong', 'problem', 'issue', 'reliability'], response: "Every system ships with fallback logic and a kill switch — if data is missing or confidence drops, the system escalates to a human instead of guessing. Silent failures at 2am aren't acceptable." },
+    { keywords: ['time', 'timeline', 'long', 'fast', 'quick', 'deliver', 'deadline'], response: "A single system typically takes 1–2 weeks from audit to delivery. Full stack engagements are 3–5 weeks. Everything is scoped clearly before any work starts — no surprises." },
+    { keywords: ['hello', 'hi', 'hey', 'start', 'help', 'what', 'who'], response: "Hi! I'm Aria, Abdullah's AI assistant. I can tell you about his Lead, Voice AI, and RAG systems — or help you book a free audit. What's your biggest operational headache right now?" },
+  ];
 
-Your job is to qualify leads and book discovery calls. Be warm, concise, and conversational. Never write long paragraphs — keep responses to 2-3 short sentences max.
-
-About Muhammad's services:
-- Lead Automation: End-to-end systems that capture, qualify, and nurture leads automatically across WhatsApp, email, and CRM — no manual follow-up needed.
-- Voice AI Agents: Custom AI phone agents that handle inbound/outbound calls, qualify prospects, answer FAQs, and book appointments 24/7.
-- RAG Systems: AI that reads your business documents, SOPs, and knowledge base to answer complex questions accurately — ideal for support, onboarding, and compliance-heavy industries.
-
-Pricing:
-- Free Audit: 30-min strategy call, no cost, identifies biggest automation opportunity
-- Single System: Starting at $1,500 — one focused automation (lead, voice, or RAG)
-- Full Stack: Starting at $4,000 — complete AI infrastructure (lead + voice + RAG integrated)
-
-Booking: https://cal.com/drabdullahautomation/30min
-
-Qualification flow (follow naturally):
-1. Ask what their business does and what their biggest time drain is
-2. Ask if they use any automation tools currently
-3. Ask how many leads or customer interactions per week
-4. Recommend the most relevant service (lead/voice/RAG)
-5. Invite them to book a free audit call
-
-Rules:
-- Never make up pricing or features not listed above
-- If asked about healthcare or pharma, mention RAG systems are powerful for clinical knowledge bases, drug information, and compliance documentation
-- If you don't know something, say "I'll have Muhammad answer that directly" and suggest booking a call
-- Do not discuss competitors
-- If someone has no budget, offer the free audit as a zero-risk first step`;
-
-  async function handleSend() {
+  function handleSend() {
     const text = chatbotInput.value.trim();
-    if (!text || isSending) return;
+    if (!text) return;
 
     appendMessage(text, 'user');
-    conversationHistory.push({ role: 'user', content: text });
     chatbotInput.value = '';
-    setSendingState(true);
     renderTypingIndicator();
 
-    try {
-      // Key stored split to avoid scanner detection — reassembled at runtime only
-      const _k = ['sk-proj-fERVRIbCmp6Q5gaS8DKwvTnQe66E7Z2LXbgBmbMoD2PwtaKh5rJ0hnjCkMq29rlb',
-                  'QQypBzb7KmT3BlbkFJ94BOP31zA9u7NB-WvB3eY93aN1R2M2pAIxtrDmjmgMaMl8KNyM-Od6vY9QxOpvQrL-sjdROBEA'].join('');
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${_k}`,
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o-mini',
-          messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...conversationHistory],
-          max_tokens: 200,
-          temperature: 0.7,
-        }),
-      });
+    const delay = Math.min(900 + text.length * 18, 2200);
 
+    setTimeout(() => {
       removeTypingIndicator();
+      const lower = text.toLowerCase();
+      let reply = "Good question — the best way to map that out specifically for your business is a quick call. 30 minutes, no pitch. <br><br><a href='https://cal.com/drabdullahautomation/30min' target='_blank' style='color:var(--accent2);font-weight:600;'>📅 Book Free Audit →</a>";
 
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({}));
-        appendMessage(err?.error?.message || 'Something went wrong. Please try again.', 'bot');
-        conversationHistory.pop();
-      } else {
-        const data = await response.json();
-        const reply = data.choices?.[0]?.message?.content || 'Sorry, I had trouble with that. Try again?';
-        const formatted = reply.replace(
-          /(https:\/\/cal\.com\/[^\s<]+)/g,
-          '<a href="$1" target="_blank" rel="noopener" style="color:var(--accent2);font-weight:600;">Book Free Audit →</a>'
-        );
-        appendMessage(formatted, 'bot');
-        conversationHistory.push({ role: 'assistant', content: reply });
+      for (const item of knowledgeBase) {
+        if (item.keywords.some(kw => lower.includes(kw))) {
+          reply = item.response;
+          break;
+        }
       }
-    } catch (err) {
-      removeTypingIndicator();
-      appendMessage('Network error. Please check your connection and try again.', 'bot');
-      conversationHistory.pop();
-    } finally {
-      setSendingState(false);
-      chatbotInput.focus();
-    }
+      appendMessage(reply, 'bot');
+    }, delay);
   }
 
   chatbotSend.addEventListener('click', handleSend);
