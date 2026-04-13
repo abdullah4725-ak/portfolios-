@@ -500,8 +500,8 @@
     });
   });
 
-  // FORM SUBMIT — sends via WhatsApp with prefilled message
-  document.getElementById('contactForm').addEventListener('submit', e => {
+  // FORM SUBMIT — sends via Web3Forms
+  document.getElementById('contactForm').addEventListener('submit', async e => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value.trim();
@@ -511,12 +511,39 @@
       alert('Please fill in your name, email, and message.');
       return;
     }
-    const company = form.company.value.trim();
-    const topic = form.topic.value;
-    const text = `Hi Abdullah,\n\nName: ${name}\nEmail: ${email}${company ? '\nCompany: ' + company : ''}${topic ? '\nTopic: ' + topic : ''}\n\nMessage:\n${message}`;
-    window.open('https://wa.me/92326281281?text=' + encodeURIComponent(text), '_blank');
-    form.reset();
-    document.getElementById('formSuccess').classList.add('show');
+    const company = form.company ? form.company.value.trim() : '';
+    const topic = form.topic ? form.topic.value : '';
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending...'; }
+
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          access_key: 'bd0d37e4-179a-4f66-83b6-c0dcce38ecd7',
+          subject: 'New contact from ' + name + (topic ? ' — ' + topic : ''),
+          from_name: name,
+          email: email,
+          message: [
+            company ? 'Company: ' + company : '',
+            topic ? 'Topic: ' + topic : '',
+            '',
+            message,
+          ].filter(Boolean).join('\n'),
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        form.reset();
+        document.getElementById('formSuccess').classList.add('show');
+      } else {
+        throw new Error(data.message || 'Submission failed');
+      }
+    } catch (err) {
+      console.error('Web3Forms error:', err);
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send message →'; }
+    }
   });
 </script>
 </body>

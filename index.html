@@ -17,11 +17,6 @@
   <link rel="canonical" href="https://portfolios-eight-puce.vercel.app/" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>
-    // EmailJS — replace these with your actual IDs after setup (see instructions below)
-    (function(){ emailjs.init({ publicKey: 'vpOC3iB8WSG7c-y4k' }); })();
-  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -1255,7 +1250,7 @@
     calculateROI(); // init
   }
 
-  // ── LEAD MAGNET FORM (EmailJS) ──
+  // ── LEAD MAGNET FORM (Web3Forms) ──
   async function handleLeadMagnet(e) {
     e.preventDefault();
     const name = document.getElementById('lmName').value.trim();
@@ -1267,19 +1262,26 @@
     btn.textContent = 'Sending...';
 
     try {
-      // Sends two emails:
-      // 1. The checklist to the person who submitted
-      // 2. A notification to you so you know who requested it
-      await emailjs.send('service_2f9brrp', 'template_u84zmrj', {
-        to_name: name,
-        to_email: email,
-        from_name: 'Muhammad Abdullah Khan',
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          access_key: 'bd0d37e4-179a-4f66-83b6-c0dcce38ecd7',
+          subject: 'New checklist request — ' + name,
+          from_name: name,
+          email: email,
+          message: name + ' requested the "5 Signs" checklist from your portfolio.',
+        }),
       });
-      document.getElementById('leadMagnetForm').style.display = 'none';
-      document.getElementById('lmSuccess').style.display = 'block';
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('leadMagnetForm').style.display = 'none';
+        document.getElementById('lmSuccess').style.display = 'block';
+      } else {
+        throw new Error(data.message || 'Submission failed');
+      }
     } catch (err) {
-      console.error('EmailJS error:', JSON.stringify(err));
-      alert('EmailJS error: ' + JSON.stringify(err)); // temporary debug — remove after fixing
+      console.error('Web3Forms error:', err);
       btn.disabled = false;
       btn.textContent = 'Send it to me →';
     }
