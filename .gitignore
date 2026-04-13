@@ -1,8 +1,16 @@
 # Claude Code settings
 .claude/
 
-# Reference images (design inspiration only, not part of the site)
+# Reference images, unused media, screenshots
 refernces/
+new pics and videos/
+screencapture-*.png
+
+# Working docs (local only, not part of the site)
+Anti_AI_Writing.md
+assets-brief.md
+media_prompts.md
+checklist.md
 
 # Old duplicate version
 Portfolio/index.html
@@ -16,3 +24,5 @@ desktop.ini
 .env
 .env.local
 .env*.local
+
+.vercel

@@ -4,41 +4,48 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Professional personal portfolio website for **Muhammad Abdullah Khan** — AI Automation Builder. Features a robust **Light/Dark Mode** system, mobile-optimized animations, and localized content for AI agency services. Built with pure HTML/CSS/JS (no build tools).
+Professional personal portfolio website for **Muhammad Abdullah Khan** — AI Automation Builder. Features a robust Light/Dark Mode system, mobile-optimized animations, and localized content for AI agency services. Built with pure HTML/CSS/JS (no build tools).
 
 ## File Structure
 
 ```
 /
-├── index.html          # Homepage — Hero, Services, ROI, Testimonials, Contact
-├── pricing.html        # Pricing tiers & simple FAQ strip
-├── faq.html            # Deep FAQ accordion + contact form
-├── notes.html          # Build Notes / Case Study detail page
-├── Portfolio/
-│   ├── assets-brief.md # Prompts used for media generation
-│   └── files/          # ALL media assets (images + video)
-│       ├── *.jpeg/png  # Backgrounds, Icons, Profile Photo
-│       └── *.mp4       # Hero background video
+├── index.html          # Homepage — Hero, Services, ROI, Credibility, Lead Magnet, Contact
+├── pricing.html        # Pricing tiers & FAQ strip
+├── faq.html            # Filterable FAQ accordion + contact form
+├── notes.html          # Case Study detail page
+├── api/
+│   └── chat.js         # Vercel serverless function (unused — chatbot is keyword-based)
+├── files/              # ALL media assets (images + video)
+│   ├── *.jpeg/png      # Backgrounds, icons, profile photo
+│   └── *.mp4           # Hero background video
+└── vercel.json         # Empty {} — lets Vercel auto-detect Node runtime
 ```
 
-**Critical:** All media is in `Portfolio/files/`. Paths in HTML must use `Portfolio/files/<filename>`.
+**Critical:** All media is in `files/`. Paths in HTML must use `files/<filename>`.
 
 ## Architecture
 
-Pages are self-contained (all CSS/JS inline). Design tokens, nav, and footer are shared across all 4 pages.
+Pages are self-contained (all CSS/JS inline). Design tokens, nav, and footer are duplicated across all 4 pages — edit each file individually.
 
 **Theme System:**
 - Uses `html[data-theme="light"]` attribute.
-- Tokens defined in `:root` (dark) and `html[data-theme="light"]` (light).
-- JavaScript at the bottom of each file handles persistence via `localStorage`.
-- **Visibility Fix:** Sub-pages use explicit light-mode CSS overrides (`color: #1a1a24 !important`) to ensure visibility where variable inheritance is flaky.
+- Tokens defined in `:root` (dark default) and `html[data-theme="light"]` (light override).
+- JS at the bottom of each file persists choice via `localStorage`.
+- **Visibility Fix:** Sub-pages use explicit light-mode CSS overrides (`color: #1a1a24 !important`) where variable inheritance is unreliable.
 
 **JavaScript Features:**
-- `IntersectionObserver` Scroll Reveal: Adds `.visible` to `.reveal` elements.
-- **Mobile Fallback:** Every page has a 2.5s timeout that forces visibility if the observer fails to trigger on mobile (`revealAllFallback()`).
-- ROI Calculator: Handles monthly savings logic (index.html).
-- Chatbot: Fully themed AI qualification agent (index.html).
-- Smooth Scroll: Handled via `scroll-behavior: smooth` and scroll-spy for active nav states.
+- `IntersectionObserver` Scroll Reveal: adds `.visible` to `.reveal` elements on scroll.
+- **Mobile Fallback:** 2.5s timeout forces `.visible` on all stuck `.reveal` elements (`revealAllFallback()`).
+- ROI Calculator: monthly savings logic in `index.html`.
+- Keyword Chatbot: 10-topic qualification agent in `index.html` (no API — pure JS).
+- Smooth Scroll: via `scroll-behavior: smooth` + scroll-spy for active nav states.
+
+**Forms:**
+- Lead magnet form (`index.html`) — Web3Forms fetch, access key `bd0d37e4-179a-4f66-83b6-c0dcce38ecd7`
+- Contact form (`faq.html`) — Web3Forms fetch, same access key
+- Both send notification emails to `doctorabdullahpharmacist@gmail.com`
+- No SDK needed — plain `fetch('https://api.web3forms.com/submit', ...)`
 
 ## Design Tokens
 
@@ -57,34 +64,37 @@ Pages are self-contained (all CSS/JS inline). Design tokens, nav, and footer are
 
 **Mobile Responsive Breakpoints:**
 - `< 1024px` — 3→2 column transitions
-- `< 768px` — Mobile view: hamburger menu, single-column stacks
-- `< 480px` — H1 scaling and padding reductions
+- `< 768px` — hamburger menu, single-column stacks
+- `< 480px` — H1 scaling, padding reductions
 
 **Reveal Pattern:**
-- Use `class="reveal"` with `reveal-delay-1` through `6`.
-- Animations trigger when 10% of element is visible.
+- `class="reveal"` with optional `reveal-delay-1` through `reveal-delay-6`
+- Triggers when 10% of element is visible
 
 **Theme Toggle:**
-- Handled by `#themeToggle`. Switches icons between `#moonIcon` and `#sunIcon`.
+- `#themeToggle` button, swaps `#moonIcon` / `#sunIcon`
 
 ## Pages Summary
 
-| Page | Key Features |
+| Page | Key Sections |
 |---|---|
-| `index.html` | Hero Video · Auto-Marquee · ROI Calc · Testimonials · Chatbot |
-| `pricing.html` | 3 Pricing tiers (Audit, System, Stack) · FAQ Strip |
-| `faq.html` | Filterable 14-question accordion · Advanced Contact Form |
-| `notes.html` | Case Study (Problem, Arch, Results) · Light-mode optimized |
+| `index.html` | Hero Video · Marquee · Services · Process · ROI Calc · Credibility · Lead Magnet · Contact |
+| `pricing.html` | 3 tiers (Audit / System / Stack) · FAQ strip |
+| `faq.html` | Filterable 14-question accordion · Contact form (Web3Forms) |
+| `notes.html` | Case study: Problem · Architecture · Results |
 
-## Content Readiness
+## Content Status
 
-- **Profile photo** — Live (Portrait photo in about section)
-- **Booking link** — Cal.com link is active across all CTAs
-- **Testimonials** — Placeholders still exist; need real client names/quotes.
-- **WhatsApp** — Live (`+92326281281`)
+- **Profile photo** — live
+- **Booking link** — `cal.com/drabdullahautomation/30min` active on all CTAs
+- **Testimonials** — replaced with honest credibility section (no fake clients)
+- **WhatsApp** — `+92326281281` live
+- **Lead magnet** — "5 Signs" checklist. PDF must be sent manually after form notification (no auto-attachment yet)
 
-## Deployment (Vercel)
+## Deployment
 
-1. Verify paths are strictly `Portfolio/files/`.
-2. Ensure large media files are not ignored by `.vercelignore`.
-3. Entry point is `index.html`. Vercel auto-deploys on push to `master`.
+- **Platform:** Vercel, auto-deploys from `master` branch on GitHub
+- **Manual deploy:** `npx vercel --prod --yes` (use when GitHub auto-deploy lags)
+- **Entry point:** `index.html`
+- **Env vars:** `OPENAI_API_KEY` set in Vercel dashboard (used by `api/chat.js` — currently inactive)
+- Paths must use `files/` (not `Portfolio/files/`) — repo root is the site root
