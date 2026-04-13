@@ -18,6 +18,24 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style media="print">
+    @page { margin: 1.5cm; }
+    body { background: #fff !important; color: #111 !important; font-size: 11pt; }
+    nav, .mobile-menu, .chatbot-widget, .back-top, .sticky-bar, .read-progress,
+    .bg-glow, .hero-video-bg, .scroll-indicator, .tools-strip, .lightbox,
+    .hero-ctas .btn-wa, .hero-ctas .btn-outline, footer .footer-socials { display: none !important; }
+    h1, h2, h3 { color: #111 !important; page-break-after: avoid; }
+    section { padding: 1.5cm 0 !important; max-width: 100% !important; page-break-inside: avoid; }
+    .gradient-text { -webkit-text-fill-color: #5e4bd8 !important; background: none !important; }
+    .btn { background: none !important; color: #5e4bd8 !important; border: 1px solid #5e4bd8 !important; box-shadow: none !important; padding: .4rem .8rem !important; font-size: 10pt !important; }
+    .stat-card, .service-card, .testi-card, .contact-card, .contact-book, .contact-form-wrap, .featured-box, .roi-container, .leadmag-box { border: 1px solid #ccc !important; background: #fff !important; box-shadow: none !important; break-inside: avoid; }
+    .services-grid, .testimonials-grid { grid-template-columns: 1fr 1fr !important; }
+    .about-grid { grid-template-columns: 120px 1fr !important; }
+    .featured-box { grid-template-columns: 1fr !important; }
+    .profile-photo { width: 100px !important; }
+    a[href]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #666; }
+    a.btn::after, a.contact-pill::after, a.nav-cta::after { content: none; }
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -297,7 +315,32 @@
     .trust-item { display: flex; align-items: center; gap: .5rem; font-size: .78rem; color: var(--muted); }
     .trust-item svg { color: var(--accent2); flex-shrink: 0; }
     .trust-item strong { color: var(--text); font-weight: 600; }
+
+    /* ── INLINE CONTACT FORM ── */
+    .contact-form-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 2rem 2.5rem; margin-bottom: 1.5rem; }
+    .contact-form-wrap h4 { font-size: 1rem; font-weight: 700; margin-bottom: .35rem; }
+    .contact-form-wrap p { font-size: .82rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: .75rem; }
+    .cf-field { display: flex; flex-direction: column; gap: .4rem; }
+    .cf-field label { font-size: .75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+    .cf-input { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: .65rem 1rem; color: var(--text); font-size: .875rem; outline: none; transition: border-color .2s; font-family: inherit; width: 100%; }
+    .cf-input:focus { border-color: var(--accent); }
+    .cf-success { display: none; padding: 1rem 1.25rem; background: rgba(124,111,255,.08); border: 1px solid rgba(124,111,255,.3); border-radius: 10px; text-align: center; }
+    .cf-success p:first-child { font-weight: 600; color: var(--accent2); margin-bottom: .3rem; }
+    .cf-success p:last-child { font-size: .82rem; color: var(--muted); }
+    @media (max-width: 600px) { .cf-row { grid-template-columns: 1fr; } .contact-form-wrap { padding: 1.5rem; } }
     @media (max-width: 768px) { .contact-cards { grid-template-columns: 1fr; } .contact-book { padding: 2rem 1.5rem; } }
+
+    /* ── STICKY AUDIT BAR ── */
+    .sticky-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 350; background: rgba(5,5,13,.92); backdrop-filter: blur(16px); border-top: 1px solid rgba(124,111,255,.25); padding: .75rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; transform: translateY(100%); transition: transform .4s cubic-bezier(.16,1,.3,1); }
+    .sticky-bar.visible { transform: translateY(0); }
+    html[data-theme="light"] .sticky-bar { background: rgba(250,250,250,.94); border-top-color: rgba(94,75,216,.2); }
+    .sticky-bar-text { font-size: .82rem; color: var(--muted); }
+    .sticky-bar-text strong { color: var(--text); }
+    .sticky-bar-right { display: flex; align-items: center; gap: .75rem; flex-shrink: 0; }
+    .sticky-bar-dismiss { background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px; border-radius: 4px; font-size: 1rem; line-height: 1; transition: color .2s; }
+    .sticky-bar-dismiss:hover { color: var(--text); }
+    @media (max-width: 600px) { .sticky-bar { padding: .6rem 1rem; } .sticky-bar-text { display: none; } }
 
     /* ── REDUCED MOTION ── */
     @media (prefers-reduced-motion: reduce) {
@@ -374,7 +417,9 @@
       h1 { font-size: 2.2rem; }
       .about-stats { grid-template-columns: 1fr 1fr; }
       .hero-label { font-size: .65rem; padding: .35rem .8rem; }
-      .chatbot-window { width: calc(100vw - 2rem); height: 380px; }
+      .chatbot-widget { left: 0; right: 0; bottom: 0; align-items: stretch; }
+      .chatbot-window { width: 100vw; height: 70vh; border-radius: 20px 20px 0 0; bottom: 60px; left: 0; transform-origin: bottom center; }
+      .chatbot-button { align-self: flex-end; margin: 0 1rem 1rem auto; }
       .stat-number { font-size: 1.6rem; }
       .stat-card { padding: 1.15rem; }
       .service-card { padding: 1.5rem; }
@@ -886,7 +931,33 @@
       </div>
     </div>
 
-    <div class="contact-book reveal reveal-delay-2">
+    <div class="contact-form-wrap reveal reveal-delay-2">
+      <h4>Prefer to write? Send a message directly.</h4>
+      <p>No booking required. Describe what's breaking and I'll reply within 4 hours on business days.</p>
+      <form id="indexContactForm">
+        <div class="cf-row">
+          <div class="cf-field">
+            <label for="icName">Name</label>
+            <input class="cf-input" type="text" id="icName" placeholder="Your name" required />
+          </div>
+          <div class="cf-field">
+            <label for="icEmail">Email</label>
+            <input class="cf-input" type="email" id="icEmail" placeholder="you@company.com" required />
+          </div>
+        </div>
+        <div class="cf-field" style="margin-bottom:.75rem;">
+          <label for="icMessage">What's the problem?</label>
+          <textarea class="cf-input" id="icMessage" rows="3" placeholder="Describe what you're trying to automate or what's breaking..." required style="resize:vertical;min-height:80px;"></textarea>
+        </div>
+        <button type="submit" id="icSubmitBtn" class="btn" style="width:100%;justify-content:center;">Send Message →</button>
+      </form>
+      <div class="cf-success" id="icSuccess">
+        <p>Message received.</p>
+        <p>I'll reply to your email within 4 hours on business days. Check spam if nothing arrives.</p>
+      </div>
+    </div>
+
+    <div class="contact-book reveal reveal-delay-3" id="contact-book">
       <div class="contact-book-label">Preferred path</div>
       <h3>Book the free audit.<br /><span class="gradient-text">30 minutes. No pitch.</span></h3>
       <p>I'll map your workflow, show you exactly where it breaks, and tell you honestly whether automation is the right fix. If it isn't, I'll say so.</p>
@@ -961,6 +1032,15 @@
   </div>
 </footer>
 
+<!-- STICKY AUDIT BAR -->
+<div class="sticky-bar" id="stickyBar" role="complementary" aria-label="Book audit prompt">
+  <span class="sticky-bar-text"><strong>Ready to see what's costing you?</strong> Free 30-min audit — no pitch, just a clear map of your workflow.</span>
+  <div class="sticky-bar-right">
+    <a href="https://cal.com/drabdullahautomation/30min" class="btn" style="padding:.5rem 1.1rem;font-size:.8rem;" target="_blank" rel="noopener">Book Free Audit →</a>
+    <button class="sticky-bar-dismiss" id="stickyBarDismiss" aria-label="Dismiss">✕</button>
+  </div>
+</div>
+
 <!-- AI CHATBOT WIDGET -->
 <div class="chatbot-widget">
   <div class="chatbot-window" id="chatbotWindow" role="dialog" aria-modal="true" aria-label="Chat with Agent MAK">
@@ -1005,8 +1085,12 @@
     else { moonIcon.style.display = 'block'; sunIcon.style.display = 'none'; }
   }
 
-  // Init theme from localStorage
-  if (localStorage.getItem('theme') === 'light') {
+  // Init theme: respect saved preference, fallback to OS preference
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    updateIcons(true);
+  } else if (!savedTheme && window.matchMedia('(prefers-color-scheme: light)').matches) {
     document.documentElement.setAttribute('data-theme', 'light');
     updateIcons(true);
   }
@@ -1344,6 +1428,23 @@
     calculateROI(); // init
   }
 
+  // ── STICKY AUDIT BAR ──
+  const stickyBar = document.getElementById('stickyBar');
+  const stickyBarDismiss = document.getElementById('stickyBarDismiss');
+  let stickyDismissed = sessionStorage.getItem('stickyDismissed');
+  const heroEl = document.getElementById('hero');
+  function updateStickyBar() {
+    if (stickyDismissed) return;
+    const heroBottom = heroEl ? heroEl.getBoundingClientRect().bottom : 0;
+    stickyBar.classList.toggle('visible', heroBottom < 0);
+  }
+  window.addEventListener('scroll', updateStickyBar, { passive: true });
+  stickyBarDismiss.addEventListener('click', () => {
+    stickyDismissed = true;
+    sessionStorage.setItem('stickyDismissed', '1');
+    stickyBar.classList.remove('visible');
+  });
+
   // ── READING PROGRESS BAR ──
   const readProgress = document.getElementById('readProgress');
   window.addEventListener('scroll', () => {
@@ -1400,6 +1501,40 @@
       btn.disabled = false;
       btn.textContent = 'Send it to me →';
     }
+  }
+
+  // ── INDEX CONTACT FORM (Web3Forms) ──
+  const indexContactForm = document.getElementById('indexContactForm');
+  if (indexContactForm) {
+    indexContactForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      const name = document.getElementById('icName').value.trim();
+      const email = document.getElementById('icEmail').value.trim();
+      const message = document.getElementById('icMessage').value.trim();
+      if (!name || !email || !message) return;
+      const btn = document.getElementById('icSubmitBtn');
+      btn.disabled = true; btn.textContent = 'Sending...';
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            access_key: 'bd0d37e4-179a-4f66-83b6-c0dcce38ecd7',
+            subject: 'New message from ' + name + ' (homepage form)',
+            from_name: name, email,
+            message,
+          }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          indexContactForm.style.display = 'none';
+          document.getElementById('icSuccess').style.display = 'block';
+        } else { throw new Error(data.message); }
+      } catch (err) {
+        console.error('Form error:', err);
+        btn.disabled = false; btn.textContent = 'Send Message →';
+      }
+    });
   }
 </script>
 </body>
