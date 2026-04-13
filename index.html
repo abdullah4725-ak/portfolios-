@@ -351,8 +351,11 @@
 
     /* ── REDUCED MOTION ── */
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-      .reveal { opacity: 1 !important; transform: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .outcome-row-1, .outcome-row-2 { animation: none !important; }
+      .bg-glow { animation: none !important; }
+      .hero-label .dot { animation: none !important; }
+      .gradient-text { animation: none !important; }
       html { scroll-behavior: auto !important; }
     }
 
