@@ -1431,14 +1431,15 @@
   // ── STICKY AUDIT BAR ──
   const stickyBar = document.getElementById('stickyBar');
   const stickyBarDismiss = document.getElementById('stickyBarDismiss');
-  let stickyDismissed = sessionStorage.getItem('stickyDismissed');
-  const heroEl = document.getElementById('hero');
+  let stickyDismissed = !!sessionStorage.getItem('stickyDismissed');
+  const heroWrapper = document.querySelector('.hero-wrapper');
   function updateStickyBar() {
-    if (stickyDismissed) return;
-    const heroBottom = heroEl ? heroEl.getBoundingClientRect().bottom : 0;
-    stickyBar.classList.toggle('visible', heroBottom < 0);
+    if (stickyDismissed) { stickyBar.classList.remove('visible'); return; }
+    const wrapperBottom = heroWrapper ? heroWrapper.getBoundingClientRect().bottom : 0;
+    stickyBar.classList.toggle('visible', wrapperBottom < 0);
   }
   window.addEventListener('scroll', updateStickyBar, { passive: true });
+  updateStickyBar(); // run once on load
   stickyBarDismiss.addEventListener('click', () => {
     stickyDismissed = true;
     sessionStorage.setItem('stickyDismissed', '1');
