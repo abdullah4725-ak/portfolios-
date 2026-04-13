@@ -1278,13 +1278,10 @@
       document.getElementById('leadMagnetForm').style.display = 'none';
       document.getElementById('lmSuccess').style.display = 'block';
     } catch (err) {
-      console.error('EmailJS error:', err);
+      console.error('EmailJS error:', JSON.stringify(err));
+      alert('EmailJS error: ' + JSON.stringify(err)); // temporary debug — remove after fixing
       btn.disabled = false;
       btn.textContent = 'Send it to me →';
-      // Fallback: open WhatsApp so lead is not lost
-      window.open(`https://wa.me/92326281281?text=${encodeURIComponent('Hi, I want the automation checklist. Name: ' + name + ', Email: ' + email)}`, '_blank');
-      document.getElementById('leadMagnetForm').style.display = 'none';
-      document.getElementById('lmSuccess').style.display = 'block';
     }
   }
 </script>
