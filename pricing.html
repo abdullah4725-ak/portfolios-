@@ -131,6 +131,9 @@
     .btn-outline:hover { border-color: rgba(124,111,255,.5); background: rgba(124,111,255,.06); box-shadow: 0 8px 30px rgba(124,111,255,.1); color: var(--accent2); }
     .btn-full { width: 100%; justify-content: center; }
 
+    /* READING PROGRESS */
+    .read-progress { position: fixed; top: 0; left: 0; width: 0%; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent3)); z-index: 999; transition: width .1s linear; }
+
     /* BACK TO TOP */
     .back-top { position: fixed; bottom: 2rem; right: 2rem; z-index: 300; width: 44px; height: 44px; border-radius: 10px; background: var(--bg3); border: 1px solid var(--border); color: var(--muted); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .25s; opacity: 0; pointer-events: none; transform: translateY(10px); }
     .back-top.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
@@ -276,6 +279,7 @@
 </head>
 <body>
 
+<div class="read-progress" id="readProgress"></div>
 <div class="bg-glow bg-glow-1"></div>
 <div class="bg-glow bg-glow-2"></div>
 <div class="bg-glow bg-glow-3"></div>
@@ -565,6 +569,13 @@
       mobileMenu.classList.remove('open');
     });
   });
+
+  // READING PROGRESS
+  const rp = document.getElementById('readProgress');
+  window.addEventListener('scroll', () => {
+    const docH = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    rp.style.width = (window.scrollY / docH * 100) + '%';
+  }, { passive: true });
 
   // BACK TO TOP
   const backTop = document.getElementById('backTop');

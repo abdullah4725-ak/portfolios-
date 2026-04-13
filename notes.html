@@ -73,6 +73,9 @@
     .mobile-menu a:hover { color:var(--text); }
     .mobile-divider { height:1px; background:var(--border); }
 
+    /* READING PROGRESS */
+    .read-progress { position:fixed; top:0; left:0; width:0%; height:3px; background:linear-gradient(90deg,var(--accent),var(--accent3)); z-index:999; transition:width .1s linear; }
+
     /* BACK TO TOP */
     .back-top { position:fixed; bottom:2rem; right:2rem; z-index:100; width:40px; height:40px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--muted); transition:all .3s; opacity:0; pointer-events:none; }
     .back-top.visible { opacity:1; pointer-events:auto; }
@@ -143,6 +146,8 @@
 </head>
 <body>
 
+<div class="read-progress" id="readProgress"></div>
+
 <div class="bg-glow bg-glow-1"></div>
 <div class="bg-glow bg-glow-2"></div>
 
@@ -207,14 +212,16 @@
     <span class="post-read">Read the breakdown →</span>
   </a>
 
-  <div class="post-card reveal reveal-delay-2" style="opacity:.5;cursor:default;pointer-events:none;">
+  <a href="#rag-healthcare" class="post-card reveal reveal-delay-2">
     <div class="post-meta">
-      <span class="post-tag">Coming Soon</span>
-      <span class="post-date">May 2026</span>
+      <span class="post-tag">Technical</span>
+      <span class="post-tag">RAG · Healthcare · PharmD</span>
+      <span class="post-date">April 2026</span>
     </div>
-    <h2>Building a RAG system that knows when to shut up</h2>
-    <p>Confidence scoring, escalation protocols, and why "I don't know" is the most important thing an AI can say.</p>
-  </div>
+    <h2>Why RAG systems need a confidence floor — especially in healthcare</h2>
+    <p>How I think about building AI that knows the difference between "I have the answer" and "I think I have the answer." In clinical settings, that gap is the whole problem.</p>
+    <span class="post-read">Read the breakdown →</span>
+  </a>
 
 </div>
 
@@ -317,6 +324,76 @@
 
 </article>
 
+<div class="divider"></div>
+
+<!-- ARTICLE: RAG HEALTHCARE -->
+<article class="article-section" id="rag-healthcare">
+
+  <div class="post-meta reveal" style="margin-bottom:1.5rem">
+    <span class="post-tag">Technical</span>
+    <span class="post-tag">RAG · Healthcare · PharmD</span>
+    <span class="post-date">April 2026</span>
+  </div>
+
+  <h1 class="reveal reveal-delay-1" style="font-size:clamp(1.6rem,4vw,2.2rem);font-weight:900;line-height:1.15;letter-spacing:-.03em;margin-bottom:1rem;">Why RAG systems need a confidence floor — especially in healthcare</h1>
+  <p class="reveal reveal-delay-2" style="color:var(--muted);font-size:1.05rem;line-height:1.7;margin-bottom:2rem;">The problem isn't that AI gets things wrong. It's that it gets things wrong confidently. That's where the architecture needs to step in.</p>
+
+  <img src="files/Glowing_brain_connected_202604121156.jpeg" alt="RAG system for healthcare" class="article-hero-img reveal reveal-delay-3" />
+
+  <h2 class="reveal">The difference between wrong and confidently wrong</h2>
+  <p class="reveal">Most RAG implementations follow the same pattern. You embed your documents, store them in a vector database, and build a retrieval layer that surfaces the relevant chunks before the LLM answers. The retrieval works. The LLM answers. The system ships.</p>
+  <p class="reveal">The problem shows up when the retrieved chunks don't actually contain the answer. The LLM doesn't say "I couldn't find this." It says something plausible. It fills the gap with its training data. In most domains, that's an annoyance. In healthcare, that's a liability.</p>
+  <p class="reveal">I'm a PharmD student at GCUF. My entire training is built around one principle: you do not guess, and if you do, you document it as a guess. An AI that can't distinguish between those two states is not safe near clinical data.</p>
+
+  <h2 class="reveal">What a confidence floor actually means</h2>
+  <p class="reveal">The confidence floor is the minimum retrieval score required before the LLM is allowed to generate a response. Below that threshold, the system doesn't answer. It escalates. That's it.</p>
+  <p class="reveal">But the threshold alone isn't enough. You also need:</p>
+  <ul class="reveal">
+    <li><strong>Retrieval score vs. semantic relevance.</strong> Cosine similarity tells you the chunk is related to the query. It doesn't tell you the chunk answers it. A high-similarity chunk about a related drug class can look relevant and be completely wrong.</li>
+    <li><strong>Chunk boundaries.</strong> Split your documents badly and you retrieve half an answer — the drug name without the contraindication. The LLM fills the missing part. That's where hallucination starts.</li>
+    <li><strong>Source provenance.</strong> The system must log which exact document and chunk produced each answer. "The AI said so" is not a source. The original document is.</li>
+  </ul>
+
+  <div class="callout reveal">
+    <p>The hardest part of building RAG for healthcare isn't the retrieval. It's getting clinicians to trust it. That trust comes from the system's ability to say "I don't know" more reliably than a person. Most RAG implementations can't do that. That's the gap worth closing.</p>
+  </div>
+
+  <h2 class="reveal">The architecture I'm working toward</h2>
+  <div class="arch-grid reveal">
+    <div class="arch-item">
+      <div class="arch-item-title">Dual retrieval check</div>
+      <p>Two separate retrievals per query — semantic similarity and keyword. Both must return overlapping results before any answer is generated.</p>
+    </div>
+    <div class="arch-item">
+      <div class="arch-item-title">Confidence gate</div>
+      <p>If the highest retrieval score is below threshold, the system returns an escalation flag — not a generated answer. No fallback to training data.</p>
+    </div>
+    <div class="arch-item">
+      <div class="arch-item-title">Source citation in output</div>
+      <p>Every answer includes the document name, section, and page number of the source chunk. Traceable before it's trusted.</p>
+    </div>
+    <div class="arch-item">
+      <div class="arch-item-title">Audit log per query</div>
+      <p>Every query, every retrieved chunk, every confidence score, every response — logged with a timestamp. For the person accountable, not for the AI.</p>
+    </div>
+  </div>
+
+  <h2 class="reveal">Why this matters outside healthcare too</h2>
+  <p class="reveal">The confidence floor pattern isn't healthcare-specific. It applies anywhere the cost of a wrong answer exceeds the cost of no answer. Legal knowledge bases. Financial compliance documentation. Insurance policy interpretation. Healthcare just makes the stakes clearest.</p>
+  <p class="reveal">If you're building RAG for any high-stakes domain, design for the failure mode first. Then optimize retrieval. Not the other way around.</p>
+
+  <h2 class="reveal">What I'm building toward</h2>
+  <p class="reveal">My long-term focus is RAG systems for pharmaceutical and clinical contexts — drug information retrieval, clinical SOP querying, adverse event documentation. Domains where the documents exist, the need to query them is constant, and the cost of an unverified AI answer is real.</p>
+  <p class="reveal">I don't have a live deployment in a clinical setting yet. What I have is the architecture thinking and the domain knowledge to build one correctly. If you're working in this space, I want to hear about it.</p>
+
+  <div class="article-cta reveal">
+    <h3>Working in a compliance-heavy domain?</h3>
+    <p>Book a free 30-minute audit. I'll look at your document structure and tell you honestly whether a RAG system is the right solution — and what a safe implementation requires.</p>
+    <a href="https://cal.com/drabdullahautomation/30min" class="btn" target="_blank" rel="noopener">Book Free Audit →</a>
+  </div>
+
+</article>
+
 <footer>
   <span>Muhammad Abdullah Khan</span><span>·</span>
   <span>AI Automation Builder</span><span>·</span>
@@ -361,6 +438,13 @@
   const bt = document.getElementById('backTop');
   window.addEventListener('scroll', () => bt.classList.toggle('visible', window.scrollY > 600), {passive:true});
   bt.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+  // READING PROGRESS
+  const rp = document.getElementById('readProgress');
+  window.addEventListener('scroll', () => {
+    const docH = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    rp.style.width = (window.scrollY / docH * 100) + '%';
+  }, {passive:true});
 </script>
 </body>
 </html>
