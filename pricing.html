@@ -18,6 +18,20 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "AI Automation — Muhammad Abdullah Khan",
+    "provider": { "@type": "Person", "name": "Muhammad Abdullah Khan", "url": "https://abdullahautomations.vercel.app/" },
+    "offers": [
+      { "@type": "Offer", "name": "Free Workflow Audit", "price": "0", "priceCurrency": "USD" },
+      { "@type": "Offer", "name": "Single System Build", "price": "1500", "priceCurrency": "USD" },
+      { "@type": "Offer", "name": "Full AI Stack", "price": "4000", "priceCurrency": "USD" }
+    ],
+    "url": "https://abdullahautomations.vercel.app/pricing.html"
+  }
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -131,6 +145,13 @@
     .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); box-shadow: none; }
     .btn-outline:hover { border-color: rgba(124,111,255,.5); background: rgba(124,111,255,.06); box-shadow: 0 8px 30px rgba(124,111,255,.1); color: var(--accent2); }
     .btn-full { width: 100%; justify-content: center; }
+
+    /* REDUCED MOTION */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
+      html { scroll-behavior: auto !important; }
+    }
 
     /* READING PROGRESS */
     .read-progress { position: fixed; top: 0; left: 0; width: 0%; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent3)); z-index: 999; transition: width .1s linear; }

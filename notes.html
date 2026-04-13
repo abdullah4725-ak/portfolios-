@@ -74,6 +74,13 @@
     .mobile-menu a:hover { color:var(--text); }
     .mobile-divider { height:1px; background:var(--border); }
 
+    /* REDUCED MOTION */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
+      html { scroll-behavior: auto !important; }
+    }
+
     /* READING PROGRESS */
     .read-progress { position:fixed; top:0; left:0; width:0%; height:3px; background:linear-gradient(90deg,var(--accent),var(--accent3)); z-index:999; transition:width .1s linear; }
 

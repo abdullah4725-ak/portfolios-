@@ -18,6 +18,14 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "name": "AI Automation FAQ — Muhammad Abdullah Khan",
+    "url": "https://abdullahautomations.vercel.app/faq.html"
+  }
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -153,6 +161,13 @@
     .contact-strip h2 { font-size:1.6rem; margin-bottom:.75rem; position:relative; }
     .contact-strip p { color:var(--muted); font-size:.95rem; margin-bottom:2rem; line-height:1.7; position:relative; }
     .contact-btns { display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap; position:relative; }
+
+    /* REDUCED MOTION */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
+      html { scroll-behavior: auto !important; }
+    }
 
     /* READING PROGRESS */
     .read-progress { position:fixed; top:0; left:0; width:0%; height:3px; background:linear-gradient(90deg,var(--accent),var(--accent3)); z-index:999; transition:width .1s linear; }
