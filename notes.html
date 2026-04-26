@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Muhammad Abdullah Khan" />
+  <meta name="theme-color" content="#7c6fff" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#5e4bd8" media="(prefers-color-scheme: light)" />
   <title>Build Notes — Muhammad Abdullah Khan · AI Automation Builder</title>
   <meta name="description" content="Behind-the-scenes breakdowns of AI automation systems built by Muhammad Abdullah Khan. Architecture decisions, failure states, and real outcomes." />
   <meta property="og:title" content="Build Notes — Muhammad Abdullah Khan · AI Automation Builder" />
@@ -18,6 +21,7 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
   <style media="print">
     @page { margin: 1.5cm; }
     body { background: #fff !important; color: #111 !important; font-size: 11pt; }
@@ -30,16 +34,8 @@
   </style>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg:#05050d; --bg2:#0d0d18; --bg3:#151520;
-      --accent:#7c6fff; --accent2:#b39dff; --accent3:#e879f9;
-      --text:#eeeeff; --muted:#777799; --border:#1e1e30; --nav-h:60px;
-    }
-    html[data-theme="light"] {
-      --bg: #fafafa; --bg2: #ffffff; --bg3: #f0f0f5;
-      --accent: #5e4bd8; --accent2: #7c6fff; --accent3: #d15ce0;
-      --text: #1a1a24; --muted: #6a6a8a; --border: #e2e2ec;
-    }
+    /* Tokens live in assets/styles.css */
+    /* Light theme tokens live in assets/styles.css */
     html { scroll-behavior: smooth; transition: background 0.4s, color 0.4s; }
     body { background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; line-height:1.6; overflow-x:hidden; transition: background 0.4s, color 0.4s; }
 
@@ -78,8 +74,8 @@
     .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; background:none; border:none; }
     .hamburger span { display:block; width:22px; height:2px; background:var(--muted); border-radius:2px; transition:all .3s; }
     .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);} .hamburger.open span:nth-child(2){opacity:0;} .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-    .mobile-menu { position:fixed; top:var(--nav-h); left:0; right:0; z-index:199; background:rgba(5,5,13,.97); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); padding:0 2rem; max-height:0; overflow:hidden; transition:max-height .4s cubic-bezier(.16,1,.3,1), padding .4s; display:flex; flex-direction:column; }
-    .mobile-menu.open { max-height:500px; padding:1.5rem 2rem; gap:1.25rem; }
+    .mobile-menu { position:fixed; top:var(--nav-h); left:0; right:0; z-index:199; background:rgba(5,5,13,.97); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); padding:0 2rem; max-height:0; overflow-y:auto; overflow-x:hidden; transition:max-height .4s cubic-bezier(.16,1,.3,1), padding .4s; display:flex; flex-direction:column; }
+    .mobile-menu.open { max-height:calc(100vh - var(--nav-h)); padding:1.5rem 2rem 2rem; gap:1.25rem; }
     .mobile-menu a { color:var(--muted); text-decoration:none; font-size:1rem; font-weight:500; transition:color .2s; }
     .mobile-menu a:hover { color:var(--text); }
     .mobile-divider { height:1px; background:var(--border); }
@@ -257,7 +253,7 @@
   <h1 class="reveal reveal-delay-1" style="font-size:clamp(1.6rem,4vw,2.2rem);font-weight:900;line-height:1.15;letter-spacing:-.03em;margin-bottom:1rem;">How I built the Omni-Channel Master Controller</h1>
   <p class="reveal reveal-delay-2" style="color:var(--muted);font-size:1.05rem;line-height:1.7;margin-bottom:2rem;">One AI brain. Two channels. A booking system that cannot double-book, cannot guess, and cannot fail silently at 2am.</p>
 
-  <img src="files/AI_system_architecture_202604121156.jpeg" alt="Omni-Channel Master Controller architecture diagram" class="article-hero-img reveal reveal-delay-3" />
+  <img src="files/AI_system_architecture_202604121156.jpeg" alt="Omni-Channel Master Controller architecture diagram" class="article-hero-img reveal reveal-delay-3" loading="lazy" />
 
   <h2 class="reveal">The problem</h2>
   <p class="reveal">The client was running a service business. They had a WhatsApp number that got 30-40 messages a day. They also had a phone number that rang for bookings. Two separate people were handling them. Double-bookings happened twice a week. The team spent two hours a day copying information between systems.</p>
@@ -356,7 +352,7 @@
   <h1 class="reveal reveal-delay-1" style="font-size:clamp(1.6rem,4vw,2.2rem);font-weight:900;line-height:1.15;letter-spacing:-.03em;margin-bottom:1rem;">Why RAG systems need a confidence floor — especially in healthcare</h1>
   <p class="reveal reveal-delay-2" style="color:var(--muted);font-size:1.05rem;line-height:1.7;margin-bottom:2rem;">The problem isn't that AI gets things wrong. It's that it gets things wrong confidently. That's where the architecture needs to step in.</p>
 
-  <img src="files/Glowing_brain_connected_202604121156.jpeg" alt="RAG system for healthcare" class="article-hero-img reveal reveal-delay-3" />
+  <img src="files/Glowing_brain_connected_202604121156.jpeg" alt="RAG system for healthcare" class="article-hero-img reveal reveal-delay-3" loading="lazy" />
 
   <h2 class="reveal">The difference between wrong and confidently wrong</h2>
   <p class="reveal">Most RAG implementations follow the same pattern. You embed your documents, store them in a vector database, and build a retrieval layer that surfaces the relevant chunks before the LLM answers. The retrieval works. The LLM answers. The system ships.</p>
